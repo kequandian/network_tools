@@ -21,9 +21,9 @@ services:
       # PASSWORD: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./local/lib:/webapps/lib
-      - ./local/classes:/webapps/classes
-      - ./local/indexes:/webapps/indexes
+      - ./data/lib:/webapps/lib
+      - ./data/classes:/webapps/classes
+      - ./data/indexes:/webapps/indexes
       - ${DUMMY_WORKING_DIR}:/webapps
     logging:
       driver: "json-file"
