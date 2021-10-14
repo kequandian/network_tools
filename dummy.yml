@@ -14,7 +14,7 @@ services:
       # DOCKER_ENDPOINT: 172.18.0.1:2375
       DOCKER_CONTAINER: biliya-api
       ROLLBACK_KEEP_NUM: 2
-      DEPLOY_OPT: deploy # dummy: continer; restart: restart container; deploy: deploy only
+      DEPLOY_OPT: ${DEPLOY_OPT} # dummy: continer; restart: restart container; deploy: deploy only
       #GREENFIELD: dummy
       # URL_SHORT: 192.168.3.239:3306/dummy
       # USERNAME: root
