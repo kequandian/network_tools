@@ -1,17 +1,25 @@
 #!/usr/bin/env bash
-outputdir=lib
-
 artifact=$1
-dest=$2
-if [ $dest -a $dest = '.' ];then
+outputdir=$2
+
+if [ $outputdir ];then
+  if [ $outputdir = '.' ];then
   ## get artifact at current pwd,
   ## use DUMMY_WORKING_DIR for mvn.sh
-  currentdir=$(pwd)
-  DUMMY_WORKING_DIR=$currentdir
+     dest=$(pwd)
+  else
+     if [ ! -d $(pwd)/$outputdir ];then
+        mkdir $(pwd)/$outputdir
+     fi
+     dest=$(pwd)
+  fi
+
+  export DUMMY_WORKING_DIR=$dest
 fi
 
 if [ ! $artifact ];then
-   echo 'usage: dependency-copy <artifact:version>'
+   echo 'usage: dependency-copy <artifact:version> [.]'
+   echo '    .  -- get dependency at local dir'
    exit
 fi
 

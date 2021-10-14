@@ -1,0 +1,7 @@
+#data-stage
+FROM zelejs/allin-web:alpine-m2 as data
+
+#builk-stage
+FROM arm32v7/alpine:latest
+
+COPY --from=data /root/.m2/settings.xml /root/.m2/settings.xml
