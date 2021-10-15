@@ -20,6 +20,7 @@ services:
       # USERNAME: root
       # PASSWORD: root
     volumes:
+      - ./crud-app-starter/pom-dev-standalone/docker/tag/api+dev-standalone/script/create-indexes.sh:/usr/local/bin/create-indexes.sh
       - /var/run/docker.sock:/var/run/docker.sock
       - ./tmp/BOOT-INF:/webapps/BOOT-INF
       # - ./tmp/WEB-INF:/webapps/WEB-INF
