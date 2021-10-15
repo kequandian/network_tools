@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
+if [ -f .env ];then source .env;fi
 artifact=$1
 outputdir=$2
+
+if [ ! $outputdir ];then
+  outputdir=data/lib
+fi
 
 if [ $outputdir ];then
   if [ $outputdir = '.' ];then

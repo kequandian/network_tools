@@ -1,3 +1,4 @@
-.env
-.class
-.jar
+.env/
+*.class
+*.jar
+/tmp/

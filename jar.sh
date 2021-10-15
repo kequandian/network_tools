@@ -6,7 +6,16 @@ if [ ! ${DUMMY_WORKING_DIR} ];then
   fi
 fi
 ###############################
+machine=$(uname -m)
+if [ $machine = armv7l ];then
 MAVEN_IMAGE=$MAVEN_IMAGE_ARM32
+else
+MAVEN_IMAGE=$MAVEN_IMAGE_AMD6G
+fi
+if [ ! $MAVEN_IMAGE ];then
+  echo MAVEN_IMAGE not defined ! > /dev/stderr
+  exit
+fi 
 
 
 SRC=${DUMMY_WORKING_DIR}

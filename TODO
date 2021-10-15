@@ -1,0 +1,5 @@
+1. archiva + tomcat -> image
+2. 增加依赖检查, checksum SCRIPT
+3. archiva deploy to archiva 207
+4. 通过 API deploy dependency 
+
