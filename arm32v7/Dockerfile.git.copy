@@ -1,0 +1,14 @@
+#data-stage
+FROM zelejs/allin-web:git as data
+
+#builk-stage
+# FROM alpine/git:latest
+FROM arm32v7/alpine:3.14
+RUN apk add --no-cache git
+
+
+COPY --from=data /root/.ssh/id_rsa /root/.ssh/id_rsa
+COPY --from=data /root/.ssh/id_rsa.pub /root/.ssh/id_rsa.pub
+
+RUN git config --global user.name "git@allin-web"
+RUN git config --global user.email "git@allin-web"
