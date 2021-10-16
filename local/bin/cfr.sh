@@ -1,42 +1,40 @@
 #!/usr/bin/env bash
 ## https://www.benf.org/other/cfr/
 ## curl -sLO https://www.benf.org/other/cfr/cfr-0.151.jar
+downloadcfr() {
+  cfrjar=$1
+  currdir=$(pwd)
+  if [ ! -f $cfrjar  ];then
+     cd $(dirname $cfrjar)
+     curl -sLO https://www.benf.org/other/cfr/cfr-0.151.jar
+     cd $currdir
+  fi
+}
 JAVA_BIN=$(which java)
 JAR_BIN=$(which jar)
 
-CFR_JAR_VERSION='../lib/cfr-0.151.jar'
+CFR_JAR_VERSION='cfr-0.151.jar'
 CFR_JAR="../lib/$CFR_JAR_VERSION"
 CFR_BIN="$JAVA_BIN -jar $CFR_JAR"
+downloadcfr $CFR_JAR
 
 
-## only standalone
-if [ ! $2 ];then
-if [ -f $1 ];then
-   javaclass=$1
-   javaclass=${javaclass##*.}
-
-   if [ "$javaclass"x = "class"x ];then
-      $CFR_BIN $@
-   fi
-   exit
-fi
-fi
-
+##################################
 ## main
+##################################
 
 ## pattern
-standalone=$1
-jarlib=$2
-javaclass=$3
+fatjar=$1
+javaclass=$2
 if [ ! $javaclass ];then
-  echo "usage: cfr <standalone> <jarlib:[pattern]> <javaclass:[pattern]>"
+  echo "usage: cfr <fatjar> <pattern>"
+  exit
+fi
+if [ ! -f $fatjar ];then
+  echo $fatjar file not exists !
   exit
 fi
 
-if [ ! -f $1 ];then
-  echo $standalone not exists !
-  exit
-fi
 
 ## check jarlib ok
 jarok=$($JAR_BIN tf $standalone | grep jar | grep -i $jarlib)
@@ -68,7 +66,4 @@ if [ $jarok ];then
         echo 
         java -jar /usr/local/lib/cfr-0.151.jar $javaclassok
     fi
-
-else
-    echo $jarlib not found in $standalone 
 fi 
