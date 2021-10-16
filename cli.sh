@@ -19,6 +19,10 @@ if [ ! $MAVEN_IMAGE ];then
   exit
 fi 
 ###############################
+if [ ! $@ ];then
+  echo 'usage: cli.sh <command line>'
+  exit
+fi
 
 LOCAL_ROOT=$(pwd)/local
 
