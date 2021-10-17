@@ -12,10 +12,8 @@ downloadcfr() {
 }
 JAVA_BIN=$(which java)
 JAR_BIN=$(which jar)
-
 CFR_JAR_VERSION='cfr-0.151.jar'
-CFR_JAR="../lib/$CFR_JAR_VERSION"
-CFR_BIN="$JAVA_BIN -jar $CFR_JAR"
+
 downloadcfr $CFR_JAR
 
 
