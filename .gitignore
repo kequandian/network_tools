@@ -1,4 +1,4 @@
-.env/
+.env
 *.class
 data/indexes/*
 *.jar
