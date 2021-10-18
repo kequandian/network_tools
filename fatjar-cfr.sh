@@ -7,10 +7,11 @@ CFR_JAR_LIB="./local/lib/$CFR_JAR_VERSION"
 downloadcfr() {
   echo curl -sL https://www.benf.org/other/cfr/$CFR_JAR_VERSION -o $CFR_JAR_LIB
   curl -sL https://www.benf.org/other/cfr/$CFR_JAR_VERSION -o $CFR_JAR_LIB
+  ls $CFR_JAR_LIB
 }
 
 getlocaljars(){
-  jars=$(ls BOOT-INF/lib/*.jar WEB-INF/lib/*.jar 2> /dev/null)
+  jars=$(ls BOOT-INF/lib/*.jar WEB-INF/lib/*.jar data/lib/*.jar 2> /dev/null)
   if [ -z $jars ];then
      exit
   fi
