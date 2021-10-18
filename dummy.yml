@@ -20,10 +20,10 @@ services:
       # USERNAME: root
       # PASSWORD: root
     volumes:
-      - ./crud-app-starter/pom-dev-standalone/docker/tag/api+dev-standalone/script/create-indexes.sh:/usr/local/bin/create-indexes.sh
+      # - /home/pi/biliya/dummy/crud-app-starter/pom-dev-standalone/docker/tag/api+dev-standalone/script/deploy.sh:/usr/local/bin/deploy.sh
       - /var/run/docker.sock:/var/run/docker.sock
       - ./tmp/BOOT-INF:/webapps/BOOT-INF
-      # - ./tmp/WEB-INF:/webapps/WEB-INF
+      - ./tmp/WEB-INF:/webapps/WEB-INF
       - ./tmp/com/jfeat:/webapps/com/jfeat
       - ./local:/webapps/local
       - ./data/lib:/webapps/lib
