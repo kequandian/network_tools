@@ -12,7 +12,7 @@ downloadcfr() {
 
 getlocaljars(){
   jars=$(ls BOOT-INF/lib/*.jar WEB-INF/lib/*.jar data/lib/*.jar 2> /dev/null)
-  if [ -z $jars ];then
+  if [ -z "$jars" ];then
      exit
   fi
   echo $jars
@@ -21,8 +21,10 @@ getlocaljars(){
 
 ## main
 pattern=$1
+opt=$2; if [ ! $opt ];then opt='z'; fi
 if [ ! $pattern ];then 
-  echo 'usage: fatjar-cfr <pattern>'
+  echo 'usage: fatjar-cfr <pattern> [-]'
+  echo ' -   --force to get latest .class'
   exit
 fi
 jars=$(getlocaljars)
@@ -48,8 +50,8 @@ for jar in $jars;do
     echo $entry
     num=$(($num+1))
   done
-  
   if [ $num = 1 ];then
+    # ensure cfr-0.151.jar exist
     if [ ! -f $CFR_JAR_LIB ];then
        downloadcfr
     fi
@@ -57,8 +59,11 @@ for jar in $jars;do
        echo "$CFR_JAR_LIB not exist !" > /dev/stderr
        exit
     fi
+    ## end check
 
-    "$JAR_BIN" xf $jar $result
+    if [ $opt = '-' -o ! -f $result ];then
+       "$JAR_BIN" xf $jar $result
+    fi
     "$JAVA_BIN" -jar $CFR_JAR_LIB $result
   fi
 done

@@ -8,12 +8,20 @@ workingdir(){
    if [ ! $DUMMY_CONTAINER ];then
       if [ -f .env ];then source .env;fi
    fi
-   curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):/webapps") | .captures[0].string'
+  #  curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):/webapps") | .captures[0].string'
+  #  curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):([a-z/]*/webapps[a-z/]*)") | .captures[].string'
+  binds=$(curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):[a-z/]*/webapps[a-z/]*").string')
+  local working_dir
+  for bind in $binds;do
+    bind=${bind%\"}
+    bind=${bind#\"}
+    if [[ $bind == *webapps ]];then
+      working_dir=${bind%:*}
+      echo $working_dir
+    fi
+  done
 }
 working_dir=$(workingdir)
-working_dir=${working_dir%\"}
-working_dir=${working_dir#\"}
-## end workding_dir
 ################################
 
 
