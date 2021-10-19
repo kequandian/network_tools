@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
-if [ -f .env ];then source .env;fi
+
+## find pattern within fatjar
+artifact_get_x(){
+   ## get artifact from fatjar
+   echo .
+}
+
 artifact_get() {
    local art=$1
+   if [ ! $art ];then 
+     exit
+   fi
    if [[ $art =~ ':' ]];then 
       echo $art
    else
@@ -10,28 +19,26 @@ artifact_get() {
       echo $art_name:$art_version
    fi
 }
-artifact_input=$1
-artifact=$(artifact_get $artifact_input)
-outputdir=$2
 
+## main 
+
+artifact_pattern=$1
+artifact=$(artifact_get $artifact_pattern)
+outputdir=$2
 
 if [ ! $outputdir ];then
   outputdir=data/lib
 fi
 
 if [ $outputdir ];then
-  if [ $outputdir = '.' ];then
-  ## get artifact at current pwd,
-  ## use DUMMY_WORKING_DIR for mvn.sh
-     dest=$(pwd)
-  else
-     if [ ! -d $(pwd)/$outputdir ];then
-        mkdir $(pwd)/$outputdir
-     fi
-     dest=$(pwd)
+  firstletter=${outputdir::1}  ##first letter
+  if [ ! $firstletter = '/' ];then 
+     outputdir="${PWD}/$outputdir"
   fi
-
-  export DUMMY_WORKING_DIR=$dest
+  if [ ! -d $outputdir ];then
+     mkdir $outputdir
+  fi
+  export DUMMY_WORKING_DIR="$outputdir"
 fi
 
 if [ ! $artifact ];then
@@ -40,5 +47,4 @@ if [ ! $artifact ];then
    exit
 fi
 
-
-./mvn.sh dependency:copy -Dartifact=com.jfeat:$artifact -DoutputDirectory=$outputdir 
+./mvn.sh dependency:copy -Dartifact=com.jfeat:$artifact -DoutputDirectory=. 

@@ -57,6 +57,9 @@ if [ ! -f ~/.m2/settings.xml ];then
 fi
 ###############################
 
-
+if [ ! ${DUMMY_WORKING_DIR} ];then
 SRC=$working_dir
+else 
+SRC=${DUMMY_WORKING_DIR}
+fi
 docker run --rm -v ~/.m2:/root/.m2 -v $SRC:/usr/src -w /usr/src --privileged $MAVEN_IMAGE mvn $@

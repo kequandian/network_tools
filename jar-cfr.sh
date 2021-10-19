@@ -11,7 +11,7 @@ downloadcfr() {
 }
 
 getlocaljars(){
-  jars=$(ls BOOT-INF/lib/*.jar WEB-INF/lib/*.jar data/lib/*.jar 2> /dev/null)
+  jars=$(ls BOOT-INF/lib/*.jar WEB-INF/lib/*.jar data/lib/*.jar *.jar 2> /dev/null)
   if [ -z "$jars" ];then
      exit
   fi
@@ -64,6 +64,12 @@ for jar in $jars;do
     if [ $opt = '-' -o ! -f $result ];then
        "$JAR_BIN" xf $jar $result
     fi
-    "$JAVA_BIN" -jar $CFR_JAR_LIB $result
+    
+    ext=${result##*.}
+    if [ $ext = 'class' ];then
+       "$JAVA_BIN" -jar $CFR_JAR_LIB $result
+    else
+       cat $result
+    fi
   fi
 done
