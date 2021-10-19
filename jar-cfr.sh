@@ -23,13 +23,13 @@ getlocaljars(){
 pattern=$1
 opt=$2; if [ ! $opt ];then opt='z'; fi
 if [ ! $pattern ];then 
-  echo 'usage: fatjar-cfr <pattern> [-]'
+  echo 'usage: jar-cfr <pattern> [-]'
   echo ' -   --force to get latest .class'
   exit
 fi
 jars=$(getlocaljars)
 if [ -z "$jars" ];then 
-  echo no fatjar found ! > /dev/stderr
+  echo no jar found ! > /dev/stderr
   exit
 fi
 
