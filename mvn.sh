@@ -1,16 +1,24 @@
 #!/usr/bin/env bash
-###############################
-if [ ! ${DUMMY_WORKING_DIR} ];then
-  if [ -f .env ];then
-    source .env
-  fi
-fi
-SRC=${DUMMY_WORKING_DIR}
-if [ ! $SRC ];then
-   echo env DUMMY_WORKING_DIR not defined ! > /dev/stderr
-   exit
-fi
+### start get working_dir
+# if [ -f .env ];then source .env;fi
+# working_dir=${DUMMY_WORKING_DIR}
+# echo working_dir= $working_dir
+workingdir(){
+   if [ ! $DUMMY_CONTAINER ];then
+      if [ -f .env ];then source .env;fi
+   fi
+   curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):/webapps") | .captures[0].string'
+}
+working_dir=$(workingdir)
+working_dir=${working_dir%\"}
+working_dir=${working_dir#\"}
+# echo working_dir= $working_dir
+## end workding_dir
 
+
+# MAVEN_IMAGE
+if [ -f .env ];then source .env;fi
+###############################
 machine=$(uname -m)
 if [ $machine = armv7l ];then
 MAVEN_IMAGE=$MAVEN_IMAGE_ARM32
@@ -22,7 +30,6 @@ if [ ! $MAVEN_IMAGE ];then
   exit
 fi
 ###############################
-
 
 # M2
 ###############################
@@ -41,8 +48,8 @@ if [ ! -f ~/.m2/settings.xml ];then
   fi
   docker run --rm -v ~/.m2:/var/m2 $MAVEN_M2_IMAGE cp /root/.m2/settings.xml /var/m2
 fi
+###############################
 
 
-# echo docker run --rm -v ~/.m2:/root/.m2 -v $SRC:/usr/src -w /usr/src --privileged $MAVEN_IMAGE mvn $@
-# echo WORKING_DIR=$SRC
+SRC=$working_dir
 docker run --rm -v ~/.m2:/root/.m2 -v $SRC:/usr/src -w /usr/src --privileged $MAVEN_IMAGE mvn $@

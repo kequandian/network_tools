@@ -1,5 +1,5 @@
 version: "3.4"
-# DEPLOY_OPT: startup: startup api; restart: restart container; deploy: deploy only
+# DUMMY_DEPLOY_OPT: startup: startup api; restart: restart container; deploy: deploy only
 services:
  dummy:
     image: arm32v7/api:dummy
@@ -11,12 +11,12 @@ services:
       ROLLBACK_KEEP_NUM: 2
       DOCKER_SOCKET: /var/run/docker.sock
       # DOCKER_ENDPOINT: 172.18.0.1:2375
-      DOCKER_CONTAINER: ${DUMMY_TARGET_CONTAINER}
-      DEPLOY_OPT: ${DEPLOY_OPT}
+      DOCKER_CONTAINER: ${DUMMY_CONTAINER}
+      DEPLOY_OPT: ${DUMMY_DEPLOY_OPT}
       # DUMMY_RUNNER: dummy
       # DUMMY_URL: ${DUMMY_URL}
       #GREENFIELD: dummy
-      # URL_SHORT: ${DUMMY_TARGET_URL}
+      # URL_SHORT: ${DUMMY_URL_SHORT}
       # USERNAME: root
       # PASSWORD: root
     volumes:

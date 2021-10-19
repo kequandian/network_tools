@@ -1,11 +1,23 @@
 #!/usr/bin/env bash
 ###############################
-if [ ! ${DUMMY_WORKING_DIR} ];then
-  if [ -f .env ];then
-    source .env
-  fi
-fi
+### start get working_dir
+# if [ -f .env ];then source .env;fi
+# working_dir=${DUMMY_WORKING_DIR}
+workingdir(){
+   if [ ! $DUMMY_CONTAINER ];then
+      if [ -f .env ];then source .env;fi
+   fi
+   curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):/webapps") | .captures[0].string'
+}
+working_dir=$(workingdir)
+working_dir=${working_dir%\"}
+working_dir=${working_dir#\"}
+## end workding_dir
+################################
+
+
 ###############################
+if [ -f .env ];then source .env;fi
 machine=$(uname -m)
 if [ $machine = armv7l ];then
 MAVEN_IMAGE=$MAVEN_IMAGE_ARM32
@@ -16,14 +28,8 @@ if [ ! $MAVEN_IMAGE ];then
   echo MAVEN_IMAGE not defined ! > /dev/stderr
   exit
 fi 
+###############################
 
-
-SRC=${DUMMY_WORKING_DIR}
-if [ ! $SRC ];then 
-   echo env DUMMY_WORKING_DIR not defined !
-   echo pls. define DUMMY_WORKING_DIR env within .env
-   exit
-fi
-
+SRC=$working_dir
 # docker-compose -f mvn.yml run --rm maven bash
 docker run --rm -v $SRC:/webapps -w /webapps --privileged $MAVEN_IMAGE jar $@
