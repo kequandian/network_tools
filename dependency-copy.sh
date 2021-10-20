@@ -43,14 +43,11 @@ artifact_get(){
 
    working_dir=$(workingdir)
    if [ -z "$working_dir" ];then 
-      # echo no container: [${DUMMY_CONTAINER}] found ! > /dev/stderr
       echo $pattern
       exit
    fi
    fatjar=$(getfatjar)
    if [ -z "$fatjar" ];then 
-      # echo + $working_dir
-      # echo no fatjar found ! > /dev/stderr`
       echo $pattern
       exit
    fi
@@ -59,15 +56,18 @@ artifact_get(){
    result=$("$JAR_BIN" tf $fatjar | grep $pattern)
    num=0
    for entry in $result;do
-      echo $entry > /dev/stderr
       num=$(($num+1))
    done
 
    if [ $num = 1 ];then 
-      resultok=$("$JAR_BIN" xf $fatjar $result)
-      echo $resultok
+      echo $(basename $result)
    elif [ $num = 0 ];then
       echo "no matches \"$pattern\" in $fatjar !" > /dev/stderr  
+   else 
+     for entry in $result;do
+       echo $entry > /dev/stderr
+     done
+     echo '.'  ## means multi matches
    fi
 }
 
@@ -91,9 +91,19 @@ artifact_x() {
 ## main 
 
 artifact_pattern=$1
-artifact=$(artifact_get $artifact_pattern)
-artifact=$(artifact_x $artifact)
+artifact_ok=$(artifact_get $artifact_pattern)
+if [ ! $artifact_ok -o $artifact_ok = '.' ];then 
+   # exit after show matches
+   exit
+fi
+artifact=$(artifact_x $artifact_ok)
 outputdir=$2
+
+if [ ! $artifact ];then
+   echo 'usage: dependency-copy <artifact:version> [.]'
+   echo ' .  -- get dependency at local dir'
+   exit
+fi
 
 if [ ! $outputdir ];then
   outputdir=data/lib
@@ -107,13 +117,43 @@ if [ $outputdir ];then
   if [ ! -d $outputdir ];then
      mkdir $outputdir
   fi
-  export DUMMY_WORKING_DIR="$outputdir"
+  export DUMMY_WORKING_DIR="$outputdir"  ## DUMMY_WORKING_DIR for ./mvn.sh
 fi
 
-if [ ! $artifact ];then
-   echo 'usage: dependency-copy <artifact:version> [.]'
-   echo '    .  -- get dependency at local dir'
-   exit
-fi
+clean_repo_artifact(){
+   local art=$1
+   local m2_home
+   if [ ${M2_HOME} -a -d ${M2_HOME} ];then 
+      m2_home=${M2_HOME}
+   elif [ ${MAVEN_HOME} -a -d ${MAVEN_HOME} ];then 
+      m2_home=${MAVEN_HOME}
+   else
+      m2_home=${HOME}/.m2
+   fi
 
+   local groupid=${art%%:*}
+         groupid=${groupid//./\/}  ## replace . with /
+   local version=${art##*:}
+   local name=${art%:*}
+         name=${name#*:}
+
+   if [ -d $m2_home/repository/$groupid/$name/$version ];then
+      tree $m2_home/repository/$groupid/$name/$version
+      echo rm -rf $m2_home/repository/$groupid/$name/$version
+      sudo rm -rf $m2_home/repository/$groupid/$name/$version
+   fi
+}
+
+echo + $artifact
+# echo mvn dependency:copy -Dartifact=$artifact -DoutputDirectory=$DUMMY_WORKING_DIR
+clean_repo_artifact $artifact
 ./mvn.sh dependency:copy -Dartifact=$artifact -DoutputDirectory=. 
+
+## show file
+filename="$outputdir/$artifact_ok"
+filename=${filename#${PWD}/}
+ls $filename -l
+
+
+## TODO
+## get com.jfeat group-id  within .jar
