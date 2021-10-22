@@ -22,4 +22,4 @@ readpath(){
    echo $(dirname $path)
 }
 
-docker-compose -f $(readpath)/local/yaml/git.yaml run --rm git git $@
+docker-compose -f $(readpath)/local/yaml/git.yaml run --rm git $@

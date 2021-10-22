@@ -3,9 +3,7 @@ services:
   git:
     image: arm32v7/allin-web:git
     working_dir: /git
-    build:
-       context: .
-       dockerfile: ./Dockerfile.git
     volumes:
       - ${PWD}:/git
       - ${HOME}/.ssh/known_hosts:/root/.ssh/known_hosts
+      

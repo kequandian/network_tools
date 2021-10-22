@@ -7,4 +7,4 @@ docker image rm zelejs/allin-web:git
 docker build . -t arm32v7/allin-web:git -f Dockerfile.git.copy
 
 ## clean up zelejs/allin-web:git
-#docker image rm zelejs/allin-web:git
+docker image rm zelejs/allin-web:git
