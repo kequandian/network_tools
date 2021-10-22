@@ -2,7 +2,7 @@
 FROM zelejs/api:dummy as data
 
 #builk-stage
-FROM arm32v7/adoptopenjdk:11-jdk
+FROM arm32v7/adoptopenjdk:11-jdk-hotspot
 
 COPY --from=data /usr/local/bin/app.jar /usr/local/bin/app.jar
 
