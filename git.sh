@@ -11,7 +11,7 @@
 ##############################
 
 # docker run --rm -it --net=host -v ${PWD}:/git -v ${HOME}/.ssh/known_hosts:/root/.ssh/known_hosts arm32v7/allin-web:git $@
-readpath(){
+script_path(){
    local path
    osname=$(uname)
    if [ $osname = Darwin ];then  ## MAC
@@ -22,4 +22,4 @@ readpath(){
    echo $(dirname $path)
 }
 
-docker-compose -f $(readpath)/local/yaml/git.yaml run --rm git $@
+docker-compose -f $(script_path)/local/yaml/git.yaml run --rm git $@

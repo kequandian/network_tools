@@ -1,6 +1,7 @@
 .env
 *.class
+BOOT-INF/
 data/indexes/*
-*.jar
+cfr-0.151.jar
 /tmp/
 crud-app-starter/
