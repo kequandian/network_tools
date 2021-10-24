@@ -19,13 +19,13 @@ workingdir(){
     fi
   done
 }
-working_dir=$(workingdir)
 ################################
 
 
 JAR_BIN=$(which jar)
 
 getfatjar(){
+  local working_dir=$(workingdir)
   standalone=$(ls $working_dir/*-standalone.jar $working_dir/app.jar $working_dir/*.war 2> /dev/null)
   if [ -z $standalone ];then
      exit
