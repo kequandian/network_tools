@@ -6,4 +6,6 @@ services:
     volumes:
       - ${PWD}:/git
       - ${HOME}/.ssh/known_hosts:/root/.ssh/known_hosts
+    entrypoint:
+      - /usr/bin/git
       

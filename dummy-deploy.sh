@@ -2,8 +2,9 @@
 ### start get working_dir
 # if [ -f .env ];then source .env;fi
 # working_dir=${DUMMY_WORKING_DIR}
+
 workingdir(){
-   if [ ! $DUMMY_CONTAINER ];then
+   if [ ! ${DUMMY_CONTAINER} ];then
       if [ -f .env ];then source .env;fi
    fi
   #  curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):/webapps") | .captures[0].string'
@@ -15,16 +16,16 @@ workingdir(){
     bind=${bind#\"}
     if [[ $bind == *webapps ]];then
       working_dir=${bind%:*}
-      echo $working_dir
+      echo ${DUMMY_CONTAINER} $working_dir
     fi
   done
 }
 working_dir=$(workingdir)
 ################################
-
-
 export DUMMY_DEPLOY_OPT=restart
-export DUMMY_WORKING_DIR=$working_dir
+export DUMMY_WORKING_DIR=${working_dir##* }
+export DUMMY_CONTAINER=${working_dir%% *}
+
 
 ## deploy with dependency:${version}
 dependency=$1
@@ -41,6 +42,5 @@ if [ ! -z $standalone ];then
   done   
 fi
 
-# export DUMMY_DEPLOY_OPT=restart
-# export DUMMY_WORKING_DIR=$working_dir
-docker-compose -f dummy.yml --project-name "dummy-${DUMMY_TARGET_CONTAINER}-deploy" up --always-recreate-deps
+echo docker-compose -f dummy.yml --project-name "${DUMMY_CONTAINER}" up --always-recreate-deps
+docker-compose -f dummy.yml --project-name "${DUMMY_CONTAINER}" up --always-recreate-deps

@@ -2,7 +2,6 @@
 FROM zelejs/allin-web:git as data
 
 #builk-stage
-# FROM alpine/git:latest
 FROM alpine:3.12
 
 RUN apk update && apk add zip git openssh

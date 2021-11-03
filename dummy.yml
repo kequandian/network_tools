@@ -3,7 +3,7 @@ version: "3.4"
 services:
  dummy:
     image: arm32v7/api:dummy
-    container_name: dummy
+    #container_name: dummy
     privileged: true
     working_dir: /webapps
     ports:
