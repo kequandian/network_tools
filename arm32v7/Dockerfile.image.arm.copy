@@ -4,6 +4,8 @@ FROM zelejs/api:dummy as data
 #builk-stage
 FROM arm32v7/adoptopenjdk:11-jdk-hotspot
 
+RUN apt-get update && apt-get install -y zip
+
 COPY --from=data /usr/local/bin/app.jar /usr/local/bin/app.jar
 
 COPY --from=data /var/local/application.yml /var/local/application.yml
