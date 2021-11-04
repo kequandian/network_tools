@@ -20,6 +20,8 @@ services:
       # URL_SHORT: ${DUMMY_URL_SHORT}
       # USERNAME: root
       # PASSWORD: root
+    entrypoint:
+      - /usr/local/bin/entrypoint.sh
     volumes:
       # - /home/pi/biliya/dummy/crud-app-starter/pom-dev-standalone/docker/tag/api+dev-standalone/script/deploy.sh:/usr/local/bin/deploy.sh
       - /var/run/docker.sock:/var/run/docker.sock
