@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+###############################
 ### start get working_dir
 # if [ -f .env ];then source .env;fi
 # working_dir=${DUMMY_WORKING_DIR}
@@ -22,5 +23,21 @@ workingdir(){
 working_dir=$(workingdir)
 ################################
 
-export DUMMY_WORKING_DIR=$working_dir
-docker-compose -f dummy.yml run --rm  --entrypoint=bash dummy
+
+###############################
+if [ -f .env ];then source .env;fi
+machine=$(uname -m)
+if [ $machine = armv7l ];then
+MAVEN_IMAGE=$MAVEN_IMAGE_ARM32
+else
+MAVEN_IMAGE=$MAVEN_IMAGE_AMD6G
+fi
+if [ ! $MAVEN_IMAGE ];then
+  echo MAVEN_IMAGE not defined ! > /dev/stderr
+  exit
+fi 
+###############################
+
+SRC=$working_dir
+# docker-compose -f mvn.yml run --rm maven bash
+docker run --rm -v $SRC:/webapps -w /webapps --privileged $MAVEN_IMAGE jar $@
