@@ -31,7 +31,7 @@ container=${DUMMY_CONTAINER}_dummy
 container_cmd=$(docker ps -a --format '{{.Names}}' | grep $container)
 if [ $container_cmd -a "$container_cmd"x = "$container"x ];then
    # has dummy container, already start, do nothing
-   container=$container
+   echo $container already started ...
 else
   #  docker-compose -f dummy.yml up --always-recreate-deps
   docker-compose -f dummy.yml run --entrypoint ls dummy 
