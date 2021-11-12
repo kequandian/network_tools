@@ -27,4 +27,4 @@ export DUMMY_DEPLOY_OPT=startup
 export DUMMY_WORKING_DIR=${working_dir##* }
 export DUMMY_CONTAINER=${working_dir%% *}
 
-docker-compose -f dummy.yml --project-name "${DUMMY_CONTAINER}" up --always-recreate-deps -d
+docker-compose -f dummy.yml up --always-recreate-deps -d

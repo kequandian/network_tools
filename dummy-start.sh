@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# dummy: continer; restart: restart container; deploy: deploy only;  dummy: ignore all, no deploy and no restart
+# dummy: continer;start: no deploy,start dummy only; restart: restart container required; deploy: deploy only without restart; dummy: start dummy api
 ###############################
 ### start get working_dir
 # if [ -f .env ];then source .env;fi
@@ -23,8 +23,10 @@ workingdir(){
 }
 working_dir=$(workingdir)
 ################################
-export DUMMY_DEPLOY_OPT=dummy
+export DUMMY_DEPLOY_OPT=start
 export DUMMY_WORKING_DIR=${working_dir##* }
 export DUMMY_CONTAINER=${working_dir%% *}
 
-docker-compose -f dummy.yml --project-name "${DUMMY_CONTAINER}" up --always-recreate-deps
+
+docker-compose -f dummy.yml up --always-recreate-deps
+

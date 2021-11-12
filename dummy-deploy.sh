@@ -42,5 +42,5 @@ if [ ! -z $standalone ];then
   done   
 fi
 
-echo docker-compose -f dummy.yml --project-name "${DUMMY_CONTAINER}" up --always-recreate-deps
-docker-compose -f dummy.yml --project-name "${DUMMY_CONTAINER}" up --always-recreate-deps
+echo docker-compose -f dummy.yml up --always-recreate-deps
+docker-compose -f dummy.yml up --always-recreate-deps

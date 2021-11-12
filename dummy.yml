@@ -1,9 +1,9 @@
 version: "3.4"
-# DUMMY_DEPLOY_OPT: startup: startup api; restart: restart container; deploy: deploy only
+# DUMMY_DEPLOY_OPT: start: start only without deploy; restart: restart container required; dummy: start dummy api
 services:
  dummy:
     image: zelejs/api:dummy
-    #container_name: dummy  ## individual name for differenc containers
+    container_name: ${DUMMY_CONTAINER}_dummy  ## individual name for differenc containers
     privileged: true
     working_dir: /webapps
     ports:
@@ -23,7 +23,7 @@ services:
     entrypoint:
       - /usr/local/bin/entrypoint.sh
     volumes:
-      # - /home/pi/biliya/dummy/crud-app-starter/pom-dev-standalone/docker/tag/api+dev-standalone/script/deploy.sh:/usr/local/bin/deploy.sh
+      - ./entrypoint.sh:/usr/local/bin/entrypoint.sh
       - /var/run/docker.sock:/var/run/docker.sock
       - ./tmp/BOOT-INF:/webapps/BOOT-INF
       - ./tmp/WEB-INF:/webapps/WEB-INF
