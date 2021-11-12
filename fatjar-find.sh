@@ -20,9 +20,14 @@ workingdir(){
   done
 }
 ################################
-
-
+dir=$(dirname $(realpath $0))
+if [ ! $dir ];then
+  dir='.';
+fi
 JAR_BIN=$(which jar)
+if [ ! $JAR_BIN ];then
+   JAR_BIN="$dir/jar.sh"
+fi
 
 getfatjar(){
   local working_dir=$(workingdir)
@@ -46,8 +51,8 @@ if [ -z "$fatjar" ];then
 fi
 
 # start
-if [ $pattern = '.' ];then 
-"$JAR_BIN" tf $fatjar 
+if [ $pattern = '.' ];then
+"$JAR_BIN" tf $fatjar
 else
 "$JAR_BIN" tf $fatjar | grep $pattern
 fi

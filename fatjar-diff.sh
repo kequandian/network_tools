@@ -1,14 +1,4 @@
 #!/usr/bin/env bash
-script_path(){
-   local path
-   osname=$(uname)
-   if [ $osname = Darwin ];then  ## MAC
-      path=$(greadlink -f "$0")
-   else                          ## Windows
-      path=$(readlink -f "$0")
-   fi
-   echo $(dirname $path)
-}
 workingdir(){
    if [ ! $DUMMY_CONTAINER ];then
       if [ -f .env ];then source .env;fi
@@ -48,4 +38,8 @@ for jar in $@;do
    fi
 done
 
-java -jar $(script_path)/local/lib/jar-dependency.jar ${args[@]}
+dir=$(dirname $(realpath $0))
+if [ ! $dir ];then 
+  dir='.'
+fi
+java -jar $dir/local/lib/jar-dependency.jar ${args[@]}

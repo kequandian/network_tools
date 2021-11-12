@@ -10,9 +10,19 @@ downloadcfr() {
      cd $currdir
   fi
 }
+dir=$(dirname $(realpath $0))
+if [ ! $dir ];then
+  dir='.';
+fi
 JAVA_BIN=$(which java)
 JAR_BIN=$(which jar)
 CFR_JAR_VERSION='cfr-0.151.jar'
+if [ ! $JAR_BIN ];then
+   JAR_BIN="$dir/jar.sh"
+fi
+if [ ! $JAVA_BIN ];then
+   JAVA_BIN="$dir/jar.sh"
+fi
 
 downloadcfr $CFR_JAR
 

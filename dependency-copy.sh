@@ -30,7 +30,14 @@ getfatjar(){
 ################################
 
 ## main
+dir=$(dirname $(realpath $0))
+if [ ! $dir ];then
+  dir='.';
+fi
 JAR_BIN=$(which jar)
+if [ ! $JAR_BIN ];then
+   JAR_BIN="$dir/jar.sh"
+fi
 
 ## find pattern within fatjar
 artifact_get(){

@@ -21,8 +21,14 @@ workingdir(){
 }
 working_dir=$(workingdir)
 ################################
-
+dir=$(dirname $(realpath $0))
+if [ ! $dir ];then
+  dir='.';
+fi
 JAR_BIN=$(which jar)
+if [ ! $JAR_BIN ];then
+   JAR_BIN="$dir/jar.sh"
+fi
 
 getfatjar(){
   standalone=$(ls $working_dir/*-standalone.jar $working_dir/app.jar $working_dir/*.war 2> /dev/null)

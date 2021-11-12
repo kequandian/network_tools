@@ -20,18 +20,14 @@ workingdir(){
   done
 }
 ################################
-script_path(){
-   local path
-   osname=$(uname)
-   if [ $osname = Darwin ];then  ## MAC
-      path=$(greadlink -f "$0")
-   else                          ## Windows
-      path=$(readlink -f "$0")
-   fi
-   echo $(dirname $path)
-}
-
+dir=$(dirname $(realpath $0))
+if [ ! $dir ];then
+  dir='.';
+fi
 JAVA_BIN=$(which java)
+if [ ! $JAVA_BIN ];then
+   JAVA_BIN="$dir/jar.sh"
+fi
 
 getfatjar(){
   local working_dir=$(workingdir)
@@ -55,5 +51,5 @@ if [ -z "$fatjar" ];then
 fi
 
 # start
-# echo "JAVA_BIN" -jar $(script_path)/local/lib/jar-dependency.jar -s $pattern $fatjar
-"$JAVA_BIN" -jar $(script_path)/local/lib/jar-dependency.jar $fatjar -s $pattern 
+# echo "JAVA_BIN" -jar $dir/local/lib/jar-dependency.jar -s $pattern $fatjar
+"$JAVA_BIN" -jar $dir/local/lib/jar-dependency.jar $fatjar -s $pattern 

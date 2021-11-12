@@ -1,8 +1,19 @@
 #!/usr/bin/env bash
+dir=$(dirname $(realpath -f $0))
+if [ ! $dir ];then
+  dir='.';
+fi
 JAR_BIN=$(which jar)
+if [ ! $JAR_BIN ];then
+   JAR_BIN="$dir/jar.sh"
+fi
+
 JAVA_BIN=$(which java)
 CFR_JAR_VERSION='cfr-0.151.jar'
-CFR_JAR_LIB="./local/lib/$CFR_JAR_VERSION"
+CFR_JAR_LIB="$dir/local/lib/$CFR_JAR_VERSION"
+if [ ! $JAVA_BIN ];then
+   JAVA_BIN="$dir/jar.sh"
+fi
 
 downloadcfr() {
   echo curl -sL https://www.benf.org/other/cfr/$CFR_JAR_VERSION -o $CFR_JAR_LIB

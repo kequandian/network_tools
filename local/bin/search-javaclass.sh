@@ -12,7 +12,14 @@ if [ ! -f $1 ];then
   exit
 fi
 
+dir=$(dirname $(realpath $0))
+if [ ! $dir ];then
+  dir='.';
+fi
 JAR_BIN=$(which jar)
+if [ ! $JAR_BIN ];then
+   JAR_BIN="$dir/jar.sh"
+fi
 
 ## check jarlib ok
 jars=$($JAR_BIN tf $standalone | grep .jar)

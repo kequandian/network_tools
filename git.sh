@@ -9,17 +9,5 @@
 #       - ${PWD}/:/git
 #       - ${HOME}/.ssh/known_hosts:/root/.ssh/known_hosts
 ##############################
-
-# docker run --rm -it --net=host -v ${PWD}:/git -v ${HOME}/.ssh/known_hosts:/root/.ssh/known_hosts arm32v7/allin-web:git $@
-script_path(){
-   local path
-   osname=$(uname)
-   if [ $osname = Darwin ];then  ## MAC
-      path=$(greadlink -f "$0")
-   else                                ## Windows
-      path=$(readlink -f "$0")
-   fi
-   echo $(dirname $path)
-}
-
-docker-compose -f $(script_path)/local/yaml/git.yaml run --rm git $@
+dir=$(dirname $(realpath "$0"))
+docker-compose -f $dir/local/yaml/git.yaml run --rm git $@
