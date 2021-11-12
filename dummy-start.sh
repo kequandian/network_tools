@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# dummy: continer; restart: restart container; deploy: deploy only
+###############################
 ### start get working_dir
 # if [ -f .env ];then source .env;fi
 # working_dir=${DUMMY_WORKING_DIR}
@@ -8,10 +10,7 @@ workingdir(){
    fi
   #  curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):/webapps") | .captures[0].string'
   #  curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):([a-z/]*/webapps[a-z/]*)") | .captures[].string'
-
-
   binds=$(curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):[a-z/]*/webapps[a-z/]*").string')
-
   local working_dir
   for bind in $binds;do
     bind=${bind%\"}
@@ -24,13 +23,8 @@ workingdir(){
 }
 working_dir=$(workingdir)
 ################################
-export DUMMY_WORKING_DIR=$working_dir
 export DUMMY_DEPLOY_OPT=dummy
+export DUMMY_WORKING_DIR=${working_dir##* }
+export DUMMY_CONTAINER=${working_dir%% *}
 
-if [ ! ${DUMMY_WORKING_DIR} ];then
-   echo DUMMY_WORKING_DIR is not defined !
-   exit
-fi
-
-echo $DUMMY_WORKING_DIR
-docker-compose -f dummy.yml run --rm  --entrypoint=bash dummy
+docker-compose -f dummy.yml --project-name "${DUMMY_CONTAINER}" up --always-recreate-deps

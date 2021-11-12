@@ -30,7 +30,7 @@ machine=$(uname -m)
 if [ $machine = armv7l ];then
 MAVEN_IMAGE=$MAVEN_IMAGE_ARM32
 else
-MAVEN_IMAGE=$MAVEN_IMAGE_AMD6G
+MAVEN_IMAGE=$MAVEN_IMAGE_AMD64
 fi
 if [ ! $MAVEN_IMAGE ];then
   echo MAVEN_IMAGE not defined ! > /dev/stderr
