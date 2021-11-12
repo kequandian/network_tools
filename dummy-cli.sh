@@ -24,13 +24,7 @@ workingdir(){
 }
 working_dir=$(workingdir)
 ################################
-export DUMMY_WORKING_DIR=$working_dir
 export DUMMY_DEPLOY_OPT=dummy
+export DUMMY_WORKING_DIR=$working_dir
 
-if [ ! ${DUMMY_WORKING_DIR} ];then
-   echo DUMMY_WORKING_DIR is not defined !
-   exit
-fi
-
-echo $DUMMY_WORKING_DIR
 docker-compose -f dummy.yml run --rm  --entrypoint=bash dummy

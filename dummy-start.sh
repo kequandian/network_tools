@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# dummy: continer; restart: restart container; deploy: deploy only
+# dummy: continer; restart: restart container; deploy: deploy only;  dummy: ignore all, no deploy and no restart
 ###############################
 ### start get working_dir
 # if [ -f .env ];then source .env;fi
@@ -17,7 +17,7 @@ workingdir(){
     bind=${bind#\"}
     if [[ $bind == *webapps ]];then
       working_dir=${bind%:*}
-      echo $working_dir
+      echo $DUMMY_CONTAINER $working_dir
     fi
   done
 }
