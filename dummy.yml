@@ -2,8 +2,8 @@ version: "3.4"
 # DUMMY_DEPLOY_OPT: startup: startup api; restart: restart container; deploy: deploy only
 services:
  dummy:
-    image: arm32v7/api:dummy
-    #container_name: dummy
+    image: zelejs/api:dummy
+    #container_name: dummy  ## individual name for differenc containers
     privileged: true
     working_dir: /webapps
     ports:
