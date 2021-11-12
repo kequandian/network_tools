@@ -22,25 +22,32 @@ workingdir(){
 }
 working_dir=$(workingdir)
 ################################
-export DUMMY_DEPLOY_OPT=restart
+export DUMMY_DEPLOY_OPT=deploy
 export DUMMY_WORKING_DIR=${working_dir##* }
 export DUMMY_CONTAINER=${working_dir%% *}
 
-
 ## deploy with dependency:${version}
-dependency=$1
-if [ $dependency ];then 
-  ./dependency-copy.sh $dependency
+# dependency=$1
+# if [ $dependency ];then 
+#   ./dependency-copy.sh $dependency
+# fi
+
+# ## handle app deploy
+# standalone=$(ls *-standalone *.war 2> /dev/null)
+# if [ ! -z $standalone ];then
+#   for app in $standalone;do
+#     echo mv $app ${DUMMY_WORKING_DIR}
+#     mv $app ${DUMMY_WORKING_DIR}
+#   done   
+# fi
+
+container=${DUMMY_CONTAINER}_dummy
+container_cmd=$(docker ps -a --format '{{.Names}}' | grep $container)
+if [ $container_cmd -a "$container_cmd"x = "$container"x ];then
+   # has dummy container, just restart
+   docker-compose -f dummy.yml restart dummy
+else
+  echo docker-compose -f dummy.yml up --always-recreate-deps
+  docker-compose -f dummy.yml up --always-recreate-deps
 fi
 
-## handle app deploy
-standalone=$(ls *-standalone *.war 2> /dev/null)
-if [ ! -z $standalone ];then
-  for app in $standalone;do
-    echo mv $app ${DUMMY_WORKING_DIR}
-    mv $app ${DUMMY_WORKING_DIR}
-  done   
-fi
-
-echo docker-compose -f dummy.yml up --always-recreate-deps
-docker-compose -f dummy.yml up --always-recreate-deps
