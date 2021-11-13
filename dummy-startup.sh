@@ -27,4 +27,13 @@ export DUMMY_DEPLOY_OPT=startup
 export DUMMY_WORKING_DIR=${working_dir##* }
 export DUMMY_CONTAINER=${working_dir%% *}
 
+container=${DUMMY_CONTAINER}_dummy
+container_cmd=$(docker ps -a --format '{{.Names}}' | grep $container)
+if [[ $container_cmd && $container_cmd = $container ]];then
+   # has dummy container, just rm it
+   docker stop $container
+   docker rm $container
+fi
+
 docker-compose -f dummy.yml up --always-recreate-deps -d
+

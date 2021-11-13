@@ -23,7 +23,6 @@ services:
     entrypoint:
       - /usr/local/bin/entrypoint.sh
     volumes:
-      - ./entrypoint.sh:/usr/local/bin/entrypoint.sh
       - /var/run/docker.sock:/var/run/docker.sock
       - ./tmp/BOOT-INF:/webapps/BOOT-INF
       - ./tmp/WEB-INF:/webapps/WEB-INF

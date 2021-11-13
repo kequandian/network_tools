@@ -41,13 +41,13 @@ export DUMMY_CONTAINER=${working_dir%% *}
 #   done   
 # fi
 
-container=${DUMMY_CONTAINER}_dummy
-container_cmd=$(docker ps -a --format '{{.Names}}' | grep $container)
-if [ $container_cmd -a "$container_cmd"x = "$container"x ];then
-   # has dummy container, just restart
-   docker-compose -f dummy.yml restart dummy
-else
+#container=${DUMMY_CONTAINER}_dummy
+#container_cmd=$(docker ps -a --format '{{.Names}}' | grep $container)
+#if [[ $container_cmd && $container_cmd = $container ]];then
+#   # has dummy container, just restart
+#   docker-compose -f dummy.yml restart dummy
+#else
   echo docker-compose -f dummy.yml up --always-recreate-deps
   docker-compose -f dummy.yml up --always-recreate-deps
-fi
+#fi
 

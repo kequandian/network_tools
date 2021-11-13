@@ -18,13 +18,13 @@ workingdir(){
     bind=${bind#\"}
     if [[ $bind == *webapps ]];then
       working_dir=${bind%:*}
-      echo $working_dir
+      echo $DUMMY_CONTAINER $working_dir
     fi
   done
 }
 working_dir=$(workingdir)
 ################################
-export DUMMY_DEPLOY_OPT=dummy
-export DUMMY_WORKING_DIR=$working_dir
+export DUMMY_WORKING_DIR=${working_dir##* }
+export DUMMY_CONTAINER=${working_dir%% *}-cli
 
-docker-compose -f dummy.yml run --rm  --entrypoint=bash dummy
+docker-compose -f dummy.yml run --rm --entrypoint=bash dummy
