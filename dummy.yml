@@ -12,12 +12,12 @@ services:
       ROLLBACK_KEEP_NUM: 2
       DOCKER_SOCKET: /var/run/docker.sock
       # DOCKER_ENDPOINT: 172.18.0.1:2375
-      DOCKER_CONTAINER: ${DUMMY_CONTAINER}
       DEPLOY_OPT: ${DUMMY_DEPLOY_OPT}
+      DOCKER_CONTAINER: ${DUMMY_CONTAINER}
       #GREENFIELD: dummy
-      # URL_SHORT: ${DUMMY_URL_SHORT}
-      # USERNAME: root
-      # PASSWORD: root
+      # URL_SHORT: ${APP_URL_SHORT}
+      # USERNAME: ${APP_USERNAME}
+      # PASSWORD: ${APP_PASSWORD}
     entrypoint:
       - /usr/local/bin/entrypoint.sh
     volumes:
