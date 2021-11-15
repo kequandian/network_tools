@@ -6,31 +6,44 @@ workingdir(){
    if [ ! $DUMMY_CONTAINER ];then
       if [ -f .env ];then source .env;fi
    fi
-  #  curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):/webapps") | .captures[0].string'
-  #  curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):([a-z/]*/webapps[a-z/]*)") | .captures[].string'
-  binds=$(curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):[a-z/]*/webapps[a-z/]*").string')
-  local working_dir
-  for bind in $binds;do
-    bind=${bind%\"}
-    bind=${bind#\"}
-    if [[ $bind == *webapps ]];then
-      working_dir=${bind%:*}
-      echo $working_dir
-    fi
-  done
+   if [ ! $DUMMY_HOST ];then
+      DUMMY_HOST=localhost
+   fi
+   if [ ! $DUMMY_PORT ];then
+      DUMMY_PORT='2375'
+   fi
+
+   echo curl -s http://${DUMMY_HOST}:${DUMMY_PORT}/containers/${DUMMY_CONTAINER}/json > /dev/stderr
+   binds=$(curl -s http://${DUMMY_HOST}:${DUMMY_PORT}/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):[a-z/]*/webapps[a-z/]*").string')
+
+   echo $binds > /dev/stderr
+   local working_dir
+   for bind in $binds;do
+     bind=${bind%\"}
+     bind=${bind#\"}
+     if [[ $bind == *webapps ]];then
+        working_dir=${bind%:*}
+        echo $working_dir
+      fi
+   done
 }
 ################################
 dir=$(dirname $(realpath $0))
 if [ ! $dir ];then
   dir='.';
 fi
-JAR_BIN=$(which jar)
+JAR_BIN=$(which jar 2> /dev/null)
 if [ ! $JAR_BIN ];then
-   JAR_BIN="$dir/jar.sh"
+   export PATH=$PATH:$dir
+   JAR_BIN="jar.sh"
 fi
 
 getfatjar(){
   local working_dir=$(workingdir)
+  if [ ! $working_dir ];then
+     echo "failure: working_dir not set !" > /dev/stderr
+     exit
+  fi
   standalone=$(ls $working_dir/*-standalone.jar $working_dir/app.jar $working_dir/*.war 2> /dev/null)
   if [ -z $standalone ];then
      exit
@@ -51,8 +64,14 @@ if [ -z "$fatjar" ];then
 fi
 
 # start
+echo start ... $pattern
 if [ $pattern = '.' ];then
+echo "$JAR_BIN" tf $fatjar
 "$JAR_BIN" tf $fatjar
 else
+echo "$JAR_BIN tf $fatjar | grep $pattern"
 "$JAR_BIN" tf $fatjar | grep $pattern
 fi
+
+
+
