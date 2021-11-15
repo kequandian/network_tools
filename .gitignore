@@ -1,4 +1,5 @@
 .env
+env.sample.*
 *.class
 BOOT-INF/
 data/indexes/*

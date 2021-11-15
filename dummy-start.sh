@@ -5,12 +5,17 @@
 # if [ -f .env ];then source .env;fi
 # working_dir=${DUMMY_WORKING_DIR}
 workingdir(){
-   if [ ! $DUMMY_CONTAINER ];then
-      if [ -f .env ];then source .env;fi
-   fi
-  #  curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):/webapps") | .captures[0].string'
-  #  curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):([a-z/]*/webapps[a-z/]*)") | .captures[].string'
-  binds=$(curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):[a-z/]*/webapps[a-z/]*").string')
+  if [[ ! $DUMMY_CONTAINER || ! $DUMMY_HOST ]];then
+    if [ -f .env ];then source .env;fi
+  fi
+  if [ ! $DUMMY_HOST ];then
+     DUMMY_HOST=localhost
+  fi
+  if [ ! $DUMMY_PORT ];then
+     DUMMY_PORT='2375'
+  fi
+
+  binds=$(curl -s http://$DUMMY_HOST:$DUMMY_PORT/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):[a-z/]*/webapps[a-z/]*").string')
   local working_dir
   for bind in $binds;do
     bind=${bind%\"}
@@ -28,15 +33,18 @@ export DUMMY_WORKING_DIR=${working_dir##* }
 export DUMMY_CONTAINER=${working_dir%% *}
 echo DUMMY_CONTAINER=$DUMMY_CONTAINER
 
+if [ ! $DUMMY_CONTAINER ];then 
+   echo "failure: DUMMY_CONTAINER not present !"
+   exit
+fi
+
 container=${DUMMY_CONTAINER}_dummy
 container_cmd=$(docker ps -a --format '{{.Names}}' | grep $container)
 if [[ $container_cmd && $container_cmd = $container ]];then
    # has dummy container, already start, do nothing
    echo $container already started ...
-else
-  #  docker-compose -f dummy.yml up --always-recreate-deps
-DUMMY_CONTAINER=$DUMMY_CONTAINER docker-compose -f dummy.yml run --entrypoint ls dummy 
+   exit
 fi
 
-
-
+#  docker-compose -f dummy.yml up --always-recreate-deps
+docker-compose -f dummy.yml up
