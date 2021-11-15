@@ -26,13 +26,17 @@ working_dir=$(workingdir)
 export DUMMY_DEPLOY_OPT=deploy
 export DUMMY_WORKING_DIR=${working_dir##* }
 export DUMMY_CONTAINER=${working_dir%% *}
+echo DUMMY_CONTAINER=$DUMMY_CONTAINER
 
 container=${DUMMY_CONTAINER}_dummy
 container_cmd=$(docker ps -a --format '{{.Names}}' | grep $container)
-if [ $container_cmd -a "$container_cmd"x = "$container"x ];then
+if [[ $container_cmd && $container_cmd = $container ]];then
    # has dummy container, already start, do nothing
    echo $container already started ...
 else
   #  docker-compose -f dummy.yml up --always-recreate-deps
-  docker-compose -f dummy.yml run --entrypoint ls dummy 
+DUMMY_CONTAINER=$DUMMY_CONTAINER docker-compose -f dummy.yml run --entrypoint ls dummy 
 fi
+
+
+
