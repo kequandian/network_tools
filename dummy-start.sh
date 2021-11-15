@@ -37,6 +37,3 @@ else
   #  docker-compose -f dummy.yml up --always-recreate-deps
 DUMMY_CONTAINER=$DUMMY_CONTAINER docker-compose -f dummy.yml run --entrypoint ls dummy 
 fi
-
-
-

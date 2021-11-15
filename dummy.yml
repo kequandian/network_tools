@@ -12,10 +12,8 @@ services:
       ROLLBACK_KEEP_NUM: 2
       DOCKER_SOCKET: /var/run/docker.sock
       # DOCKER_ENDPOINT: 172.18.0.1:2375
-      DOCKER_CONTAINER: ${DUMMY_CONTAINER}
       DEPLOY_OPT: ${DUMMY_DEPLOY_OPT}
-      # DUMMY_RUNNER: dummy
-      # DUMMY_URL: ${DUMMY_URL}
+      DOCKER_CONTAINER: ${DUMMY_CONTAINER}
       #GREENFIELD: dummy
       # URL_SHORT: ${DUMMY_URL_SHORT}
       # USERNAME: root
