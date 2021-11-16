@@ -13,10 +13,9 @@ workingdir(){
       DUMMY_PORT='2375'
    fi
 
-   echo curl -s http://${DUMMY_HOST}:${DUMMY_PORT}/containers/${DUMMY_CONTAINER}/json > /dev/stderr
+   # echo curl -s http://${DUMMY_HOST}:${DUMMY_PORT}/containers/${DUMMY_CONTAINER}/json > /dev/stderr
    binds=$(curl -s http://${DUMMY_HOST}:${DUMMY_PORT}/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):[a-z/]*/webapps[a-z/]*").string')
 
-   echo $binds > /dev/stderr
    local working_dir
    for bind in $binds;do
      bind=${bind%\"}
@@ -64,14 +63,12 @@ if [ -z "$fatjar" ];then
 fi
 
 # start
-echo start ... $pattern
+# echo start searching ... $pattern > /dev/stderr
 if [ $pattern = '.' ];then
-echo "$JAR_BIN" tf $fatjar
+# echo "$JAR_BIN" tf $fatjar
 "$JAR_BIN" tf $fatjar
 else
-echo "$JAR_BIN tf $fatjar | grep $pattern"
+# echo "$JAR_BIN tf $fatjar | grep $pattern"
 "$JAR_BIN" tf $fatjar | grep $pattern
 fi
-
-
 

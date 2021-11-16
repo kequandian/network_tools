@@ -20,13 +20,16 @@ fi
 
 basejar=${jar##*\/}
 firstletter=${jar::1}  ##first letter
-if [[ $firstletter = '/' ]];then 
-   ln -s $jar /tmp/$basejar
+if [[ $firstletter = '/' ]];then
+   basejar=/tmp/$basejar
+   if [ -f $basejar ];then 
+      unlink $basejar
+   fi
+   echo ln -s $jar $basejar
+   ln -s $jar $basejar
 fi
 
 newargs=${args//$jar/$basejar}
-docker run --rm --privileged -v ${PWD}:/dummy -v /tmp/$basejar:/tmp/$basejar -w /dummy $image jar $newargs
+# echo docker run --rm --privileged -v ${PWD}:/dummy -v $basejar:$basejar -w /dummy $image jar $newargs
+docker run --rm --privileged -v ${PWD}:/dummy -v $basejar:$basejar -w /dummy $image jar $newargs
 
-if [ -f /tmp/$basejar ];then 
-   unlink /tmp/$basejar
-fi

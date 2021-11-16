@@ -13,7 +13,7 @@ workingdir(){
     DUMMY_PORT='2375'
   fi
 
-  echo curl -s http://${DUMMY_HOST}:${DUMMY_PORT}/containers/${DUMMY_CONTAINER}/json > /dev/stderr
+  # echo curl -s http://${DUMMY_HOST}:${DUMMY_PORT}/containers/${DUMMY_CONTAINER}/json > /dev/stderr
   binds=$(curl -s http://${DUMMY_HOST}:${DUMMY_PORT}/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):[a-z/]*/webapps[a-z/]*").string')
 
   local working_dir
@@ -57,6 +57,5 @@ if [ -z "$fatjar" ];then
   exit
 fi
 
-# start
 # echo "JAVA_BIN" -jar $dir/local/lib/jar-dependency.jar -s $pattern $fatjar
 "$JAVA_BIN" -jar $dir/local/lib/jar-dependency.jar $fatjar -s $pattern 
