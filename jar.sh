@@ -11,6 +11,12 @@ for arg in $args;do
   fi
 done
 
+if [[ ! $jar || ! -f $jar ]];then
+  echo jar=$jar not exits!
+  echo input args: $args
+  exit
+fi
+
 basejar=$(basename $jar)
 firstletter=${jar::1}  ##first letter
 if [[ $firstletter = '/' ]];then 

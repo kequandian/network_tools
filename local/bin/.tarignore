@@ -1,0 +1,14 @@
+# *rollback
+# */data/
+*.log
+*logs/
+*.gz
+*.tar
+*.swp
+.git/
+node_modules/
+.idea/
+.ssh/
+.cache/
+.profile
+.bashrc
