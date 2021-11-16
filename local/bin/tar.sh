@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 ## test array
-# arr=(foo bar)
+#arr=(foo bar)
+# #remove the latest arg
+#unset "arr[${#arr[@]}-1]"
 # echo ${#arr[@]}
-# exit 2
+#echo ${arr[@]}
+#exit 2
 ################1
 
 ## get name for snapshot
 # currdir=${PWD}
 # archiva=${currdir##*\/}
-# target=$archiva-SNAPSHOT.tar
+# archive=$archiva-SNAPSHOT.tar
 ignore='.tarignore'
 
-## read archiva config files
+## read archive config files
 exclude_array=()
 readignorelines(){
    input="${PWD}/$ignore"
@@ -45,15 +48,20 @@ buildexcludeline(){
 readignorelines
 exclude_line=$(buildexcludeline)
 
-# echo tar $exclude_line $@
-tar $exclude_line $@
+
+last_arg=${@: -1}
+args=($@)
+unset "args[${#args[@]}-1]"
+
+# echo tar ${args[@]} $exclude_line $last_arg
+tar ${args[@]} $exclude_line $last_arg
 
 
 
 
 
 
-# tar -cvf  $target \
+# tar -cvf  $archive \
 #     --exclude=*.jar --exclude=*.jar.* --exclude=*.war  --exclude=*rollback* \
 #     --exclude=./*mysql*/data/* \
 #     --exclude=./web/dist \
@@ -68,7 +76,7 @@ tar $exclude_line $@
 # ## add ./api/app.jar
 # if [ -f ./api/app.jar ];then
 #    echo step 2 => pack ./api/app.jar
-#    tar -uvf $target ./api/app.jar 
+#    tar -uvf $archive ./api/app.jar 
 # else
 #    echo warning: no ./api/app.jar found !
 # fi
@@ -76,11 +84,13 @@ tar $exclude_line $@
 # ## add web/dist
 # if [ -d ./web/dist ];then
 #    echo step 2 => pack ./web/dist
-#    tar -uvf $target ./web/dist
+#    tar -uvf $archive ./web/dist
 # else
 #    echo warning: no ./web/dist found !
 # fi
 
 # echo '=> add api/app.jar or web/dist manually'
-# echo tar -uvf $target ./api/app.jar
-# echo tar -uvf $target ./web/dist
+# echo tar -uvf $archive ./api/app.jar
+# echo tar -uvf $archive ./web/dist
+
+
