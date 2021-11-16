@@ -52,7 +52,7 @@ run() {
   if [ "$detach"x = "-d"x  -a  "$navicat"x = "navicat"x ];then
      docker start navicat
   else
-     local dir=$(dirname $(readlink -n $0) 2> /dev/null)
+     local dir=$(dirname $(realpath $0) 2> /dev/null)
      if [ ! $dir ];then
         dir='.'
      fi

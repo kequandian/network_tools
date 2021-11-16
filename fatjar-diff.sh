@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
 workingdir(){
-   if [ ! $DUMMY_CONTAINER ];then
-      if [ -f .env ];then source .env;fi
-   fi
-  #  curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):/webapps") | .captures[0].string'
-  #  curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):([a-z/]*/webapps[a-z/]*)") | .captures[].string'
-  binds=$(curl -s http://localhost:2375/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):[a-z/]*/webapps[a-z/]*").string')
+  if [ ! $DUMMY_CONTAINER ];then
+     if [ -f .env ];then source .env;fi
+  fi
+  if [ ! $DUMMY_HOST ];then
+    DUMMY_HOST=localhost
+  fi
+  if [ ! $DUMMY_PORT ];then
+     DUMMY_PORT='2375'
+  fi
+
+  echo curl -s http://${DUMMY_HOST}:${DUMMY_PORT}/containers/${DUMMY_CONTAINER}/json > /dev/stderr
+  binds=$(curl -s http://${DUMMY_HOST}:${DUMMY_PORT}/containers/${DUMMY_CONTAINER}/json | jq '.HostConfig.Binds[] | match("([a-z/]+):[a-z/]*/webapps[a-z/]*").string')
+  
   local working_dir
   for bind in $binds;do
     bind=${bind%\"}

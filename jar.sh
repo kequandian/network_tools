@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #image='arm32v7/api:dummy'
-image='adoptopenjdk:11-jdk-hotspot'
+#image='adoptopenjdk:11-jdk-hotspot'
+image='zelejs/api:dummy'
 
 args=$@
 
@@ -12,17 +13,23 @@ for arg in $args;do
 done
 
 if [[ ! $jar || ! -f $jar ]];then
-  echo jar=$jar not exits!
-  echo input args: $args
-  exit
+   echo jar=$jar not exits!
+   echo input args: $args
+   exit
 fi
 
-basejar=$(basename $jar)
+basejar=${jar##*\/}
 firstletter=${jar::1}  ##first letter
-if [[ $firstletter = '/' ]];then 
+if [[ $firstletter = '/' ]];then
+   basejar=/tmp/$basejar
+   if [ -f $basejar ];then 
+      unlink $basejar
+   fi
+   echo ln -s $jar $basejar
    ln -s $jar $basejar
 fi
 
 newargs=${args//$jar/$basejar}
-docker run --rm --privileged -v ${PWD}:/dummy -w /dummy $image jar $newargs
+# echo docker run --rm --privileged -v ${PWD}:/dummy -v $basejar:$basejar -w /dummy $image jar $newargs
+docker run --rm --privileged -v ${PWD}:/dummy -v $basejar:$basejar -w /dummy $image jar $newargs
 

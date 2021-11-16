@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-dir=$(dirname $(realpath -f $0))
+dir=$(dirname $(realpath $0))
 if [ ! $dir ];then
   dir='.';
 fi
