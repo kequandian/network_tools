@@ -3,7 +3,7 @@ version: "3.4"
 # COMPOSE_DOCKER_CLI_BUILD=1 docker-compose build
 services:
   mysqlagent:
-    image: 'daocloud.io/library/nginx:latest'
+    image: 'daocloud.io/library/nginx:stable'
     container_name: navicat
     privileged: true
     logging:
