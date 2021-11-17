@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 usage(){
-   echo "usage: ORIGIN=<Container>[:port] navicat.sh [start|stop|console]"
-   echo '   e.g.  ORIGIN=mysqlserver navicat.sh console'
+   echo "usage: TARGET=<Container>[:port] navicat.sh [start|stop|console]"
+   echo '   e.g.  TARGET=mysqlserver navicat.sh console'
    exit
 }
 
@@ -62,7 +62,7 @@ run() {
      fi
 
      ## attach origin mysql server
-     local network=$(fixconf ${ORIGIN} $dir)
+     local network=$(fixconf ${TARGET} $dir)
 
      echo docker-compose -f $dir/share/navicat.yml up $detach
      NETWORK=$network docker-compose -f $dir/share/navicat.yml up $detach
@@ -76,8 +76,8 @@ opt=$1
 if [ ! $opt ];then
    usage
 fi
-if [ ! ${ORIGIN} ];then 
-   echo env ORIGIN not yet defined !
+if [ ! ${TARGET} ];then 
+   echo env TARGET not yet defined !
    usage
 fi
 
