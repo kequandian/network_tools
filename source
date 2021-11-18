@@ -1,0 +1,11 @@
+#!/bin/sh
+if [ ! -f .dummy ];then
+  dummypath=$(realpath $0)
+  dummypath=${dummypath%\/*}
+  dummypath=$dummypath/local/bin
+  echo "export PATH=\$PATH:$dummypath" > .dummy
+fi
+
+
+echo source .dummy && echo $PATH
+

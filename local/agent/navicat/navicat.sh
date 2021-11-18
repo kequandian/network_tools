@@ -7,7 +7,7 @@ usage(){
 
 get_container_network(){
    cont=$1
-   echo $(docker inspect smartsee --format '{{range $k, $v := .NetworkSettings.Networks}}{{printf "%s" $k}}{{end}}')
+   echo $(docker inspect $TARGET --format '{{range $k, $v := .NetworkSettings.Networks}}{{printf "%s" $k}}{{end}}')
 }
 
 fixconf(){
@@ -32,8 +32,14 @@ fixconf(){
    
    ## handle container
    if [ $container ];then
-      network=$(get_container_network $container)
+     network=$(get_container_network $container)
+
+     if [ ! $network ];then
+        echo "fail to get network from container $container" > /dev/stderr
+        return
+     fi
    fi
+
 
    ## fix conf.d/*.mod
    local target="$dir/share/conf.d/mysql-expose.mod"
@@ -41,7 +47,7 @@ fixconf(){
    sed -i "s/    server[[:space:]]*mysqlserver:3306;/    server $server:$port;/"  $target
    ## end fix conf
 
-
+   echo "$container $network" > /dev/stderr
    echo $network    
 }
 
@@ -64,7 +70,7 @@ run() {
      ## attach origin mysql server
      local network=$(fixconf ${TARGET} $dir)
 
-     echo docker-compose -f $dir/share/navicat.yml up $detach
+     #echo docker-compose -f $dir/share/navicat.yml up $detach
      NETWORK=$network docker-compose -f $dir/share/navicat.yml up $detach
   fi
 }
