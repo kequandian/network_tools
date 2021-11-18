@@ -17,4 +17,4 @@ if [[ $target = '.' ]];then
 fi
 
 dir=$(dirname $(realpath $0))
-$dir/tar.sh cvf ${target_name}_$(date "+%m-%d").tar $target
+$dir/tar.sh cvf ${target_name}_$(date "+%Y-%m-%d").tar $target
