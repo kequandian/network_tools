@@ -10,7 +10,6 @@
 node_modules
 .npm
 ## java
-*/.git
 */target
 */.idea
 */.vscode
@@ -21,9 +20,22 @@ node_modules
 */.project
 */.classpath
 */*.iml
-#### java current
-*.iml
+#### java current 
 .settings
 .project
 .project
 .classpath
+*.iml
+## mysql
+mysql
+*/data
+## jar
+*/BOOT-INF
+*/WEB-INF
+*/indexes
+*/*.jar
+*.jar
+## src 
+*/.git
+.git
+

@@ -12,7 +12,15 @@
 # currdir=${PWD}
 # archiva=${currdir##*\/}
 # archive=$archiva-SNAPSHOT.tar
+IGNORE='_tarignore'
 ignore='.tarignore'
+
+dir=$(dirname $(realpath $0))
+if [ ! -f $ignore ];then
+   cp $dir/$IGNORE ./$ignore
+fi
+
+
 
 ## read archive config files
 exclude_array=()
