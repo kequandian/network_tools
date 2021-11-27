@@ -11,8 +11,10 @@ composedir(){
    if [ ! $DUMMY_PORT ];then
      DUMMY_PORT='2375'
    fi
+   curl -s http://$DUMMY_HOST:$DUMMY_PORT/containers/${DUMMY_CONTAINER}/json | jq '.Config.Labels."com.docker.compose.project.config_files"'
    curl -s http://$DUMMY_HOST:$DUMMY_PORT/containers/${DUMMY_CONTAINER}/json | jq '.Config.Labels."com.docker.compose.project.working_dir"'
 }
+
 ##################################
 compose_dir=$(composedir)
 compose_dir=${compose_dir%\"}

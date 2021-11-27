@@ -44,7 +44,7 @@ getfatjar(){
      exit
   fi
   standalone=$(ls $working_dir/*-standalone.jar $working_dir/app.jar $working_dir/*.war 2> /dev/null)
-  if [ -z $standalone ];then
+  if [ -z "$standalone" ];then
      exit
   fi
   echo $standalone
