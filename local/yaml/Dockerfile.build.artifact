@@ -1,0 +1,10 @@
+FROM zelejs/allin-web:m2 as m2
+
+FROM zelejs/allin-web:build-cache-artifact as cache
+
+FROM maven:3.6-openjdk-11-slim as build
+WORKDIR /root/.m2 
+COPY --from=m2 /root/.m2/settings.xml .
+COPY --from=cache /root/.m2/repository/ ./repository
+
+WORKDIR /usr/src

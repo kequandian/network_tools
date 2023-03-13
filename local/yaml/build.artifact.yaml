@@ -1,0 +1,13 @@
+version: "3.4"
+services:
+  mvn-cli:
+    image: allin-web:build-artifact-1
+    working_dir: /usr/src
+    network_mode: host
+    volumes:
+      - ${PWD}:/usr/src
+    build: 
+      context: .
+      dockerfile: Dockerfile.build.artifact
+
+      
