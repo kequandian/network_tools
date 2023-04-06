@@ -1,0 +1,11 @@
+version: "3.4"
+services:
+  git:
+    image: zelejs/allin-web:git
+    working_dir: /git
+    network_mode: host
+    volumes:
+      - ${PWD}:/git
+      - ${HOME}/.ssh/known_hosts:/root/.ssh/known_hosts
+    entrypoint:
+      - /usr/bin/git

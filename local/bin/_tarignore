@@ -1,0 +1,41 @@
+## linux
+*.gz
+*.tar
+*.swp
+*.log
+## nodejs
+*/node_modules
+*/.npm
+#### nodejs current
+node_modules
+.npm
+## java
+*/target
+*/.idea
+*/.vscode
+*/config
+*/logs
+*/*.log
+*/.settings
+*/.project
+*/.classpath
+*/*.iml
+#### java current 
+.settings
+.project
+.project
+.classpath
+*.iml
+## mysql
+mysql
+*/data
+## jar
+*/BOOT-INF
+*/WEB-INF
+*/indexes
+*/*.jar
+*.jar
+## src 
+*/.git
+.git
+

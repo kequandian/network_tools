@@ -1,0 +1,1 @@
+local/agent/navicat/navicat.sh

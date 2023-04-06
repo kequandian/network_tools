@@ -1,0 +1,17 @@
+{
+    "name": "network-cli",
+    "version": "0.0.1",
+    "main": "network-cli",
+    "repository": "dev",
+    "author": "smallsaas.cn",
+    "dependencies": {
+        "commander": "^2.16.0",
+        "handlebars": "^4.0.11"
+    },
+    "bin": {
+        "curl-net": "./curl/curl",
+        "ping-net": "./ping/ping",
+        "jar-net": "./jar/jar",
+        "deploy-lib":"./deploy-lib/deploy-lib"
+    }
+}

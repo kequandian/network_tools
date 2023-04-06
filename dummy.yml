@@ -1,0 +1,38 @@
+version: "3.4"
+# DUMMY_DEPLOY_OPT: start: start only without deploy; restart: restart container required; dummy: start dummy api
+services:
+ dummy:
+    image: zelejs/api:dummy
+    container_name: ${DUMMY_CONTAINER}_dummy  ## individual name for differenc containers
+    privileged: true
+    working_dir: /webapps
+    network_mode: host
+    ports:
+      - 6000:8080
+    environment:
+      ROLLBACK_KEEP_NUM: 2
+      DOCKER_SOCKET: /var/run/docker.sock
+      # DOCKER_ENDPOINT: 172.18.0.1:2375
+      DEPLOY_OPT: ${DUMMY_DEPLOY_OPT}
+      DOCKER_CONTAINER: ${DUMMY_CONTAINER}
+      #GREENFIELD: dummy
+      # URL_SHORT: ${APP_URL_SHORT}
+      # USERNAME: ${APP_USERNAME}
+      # PASSWORD: ${APP_PASSWORD}
+    entrypoint:
+      - /usr/local/bin/entrypoint.sh
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./tmp/BOOT-INF:/webapps/BOOT-INF
+      - ./tmp/WEB-INF:/webapps/WEB-INF
+      # - ./tmp/com/jfeat:/webapps/com/jfeat
+      - ./local:/webapps/local
+      - ./data/app:/var/webapps/app
+      - ./data/lib:/var/webapps/lib
+      - ./data/classes:/var/webapps/classes
+      - ./data/indexes:/webapps/indexes
+      - ${DUMMY_WORKING_DIR}:/webapps
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"

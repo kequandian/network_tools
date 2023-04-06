@@ -1,0 +1,19 @@
+version: "3.4"
+# - ./dist:/usr/share/nginx/html
+# COMPOSE_DOCKER_CLI_BUILD=1 docker-compose build
+services:
+  navicat:
+    image: nginx:stable
+    container_name: navicat
+    privileged: true
+    logging:
+      driver: "json-file"
+      options: 
+        max-size: "1k"
+    network_mode: ${NETWORK}
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./conf.d/mysql-expose.mod:/etc/nginx/conf.d/mysql-expose.mod
+    ports:
+      - 23336:23306
+  

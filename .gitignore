@@ -1,0 +1,8 @@
+.env
+env.sample.*
+*.class
+data/indexes/*
+BOOT-INF/
+META-INF/
+node_modules/
+package-lock.json

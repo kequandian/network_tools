@@ -1,0 +1,53 @@
+#data-stage
+FROM zelejs/mysqlbackup:latest as data
+
+#builk-stage
+# network work only on alpine:3.12
+FROM alpine:3.12
+
+WORKDIR /var/mysqlbackup
+# deploy:
+#       resources:
+#         limits:
+#           cpus: '1.0'
+#           memory: 50M
+#         reservations:
+#           cpus: '0.5'
+#           memory: 20M
+
+RUN apk update
+RUN apk add tzdata && cp -r -f /usr/share/zoneinfo/Hongkong /etc/localtime 
+RUN apk add bash cpulimit mysql-client
+# RUN sh -c "rm -rf /var/cache/apk/*"
+# # if mysql-backup is executed in the same server as your MySQL, it could use up
+# # high% of CPU,especially during tar.CPU_LIMIT will allow you to limit your cpu 
+# # usage used for backing up.
+ENV CPU_LIMIT 100
+
+
+# COPY ./script/mysqlbackup /etc/periodic/daily
+# RUN chmod +x /etc/periodic/daily/mysqlbackup
+COPY --from=data /etc/periodic/daily/mysqlbackup /etc/periodic/daily/mysqlbackup
+
+# COPY ./script/crond.sh /usr/local/bin
+COPY --from=data /usr/local/bin/crond.sh /usr/local/bin/crond.sh
+
+RUN ln -s /usr/local/bin/crond.sh ./crond.sh
+
+# COPY ./tools/sync-db-im.sh /home
+# COPY ./tools/sync-db.sh /home
+COPY --from=data /home/sync-db-im.sh /home/sync-db-im.sh
+COPY --from=data /home/sync-db.sh /home/sync-db.sh
+
+RUN mkdir -p /var/mysqlbackup/data
+RUN mkdir -p /var/mysqlbackup/log
+RUN mkdir -p /var/mysqlbackup/tools
+
+# COPY ./dump-now.sh /home
+# COPY ./script/dump_local.sh /dump_local.sh
+COPY --from=data /home/dump-now.sh /home/dump-now.sh
+COPY --from=data /dump_local.sh /dump_local.sh
+
+
+#CMD ["/bin/sh","-c","crond -f -l 8"]
+CMD ["/bin/sh","-c","/bin/sh /usr/local/bin/crond.sh"]

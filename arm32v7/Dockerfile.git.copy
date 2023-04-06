@@ -1,0 +1,15 @@
+#data-stage
+FROM zelejs/allin-web:git as data
+
+#builk-stage
+FROM alpine:3.12
+
+RUN apk update && apk add zip git openssh
+
+COPY --from=data /var/.ssh/arm/id_rsa /root/.ssh/id_rsa
+COPY --from=data /var/.ssh/arm/id_rsa.pub /root/.ssh/id_rsa.pub
+
+RUN git config --global user.name "git@allin-web"
+RUN git config --global user.email "git@allin-web"
+
+ENTRYPOINT ["/usr/bin/git"]
