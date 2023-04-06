@@ -13,6 +13,7 @@
         "dependency-copy": "./dependency-copy.sh",
         "navicat-server": "./local/agent/navicat/navicat.sh",
         "navicat": "./navicat.sh",
-	"image-kids":"./image-kids.sh"
+        "socat-console": "./local/bin/socat-console.sh",
+        "image-kids": "./image-kids.sh"
     }
 }
