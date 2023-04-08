@@ -14,7 +14,8 @@
         "navicat-server": "./local/agent/navicat/navicat.sh",
         "navicat": "./navicat.sh",
         "socat-console": "./local/bin/socat-console.sh",
-	"mvn-wrap":"./mvn-wrap.sh",
+        "mvn-wrap": "./mvn-wrap.sh",
+        "git-wrap": "./git-wrap.sh",
         "image-kids": "./image-kids.sh"
     }
 }
