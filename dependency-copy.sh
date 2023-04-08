@@ -115,12 +115,12 @@ artifact=$(artifact_x $artifact_ok)
 outputdir=$2
 
 if [ ! $artifact ];then
-   echo 'usage: dependency-copy <group:artifact:version> [.]'
+   echo 'usage: dependency-copy <group:artifact:version> [output-dir]'
    exit
 fi
 
 if [ ! $outputdir ];then
-  outputdir=data/lib
+  outputdir=.
 fi
 
 if [ $outputdir ];then
@@ -161,12 +161,19 @@ clean_repo_artifact(){
 echo + $artifact
 # echo mvn dependency:copy -Dartifact=$artifact -DoutputDirectory=$DUMMY_WORKING_DIR
 clean_repo_artifact $artifact
-mvn dependency:copy -Dartifact=$artifact -DoutputDirectory=. 
+mvn_ok=$(which mvn 2> /dev/null)
+if [ -z $mvn_ok ];then 
+   echo mvn has not yet installed !
+   echo apt install -y mvn
+   exit
+fi
+mvn dependency:copy -Dartifact=$artifact -DoutputDirectory=$outputdir 
 
 ## show file
-filename="$outputdir/$artifact_ok"
-filename=${filename#${PWD}/}
-ls $filename -l
+#filename="$outputdir/$artifact_ok"
+#filename=${filename#${PWD}/}
+filename=${outputdir#${PWD}/}
+ls $filename/*.jar -l 2> /dev/null
 
 
 ## TODO
