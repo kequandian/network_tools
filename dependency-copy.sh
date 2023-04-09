@@ -104,6 +104,14 @@ artifact_x() {
 
 
 ## main 
+usage(){
+  echo 'usage: dependency-copy <group:artifact:version> [output-dir]'
+  echo '   output-dir:  default .'
+  exit -1
+}
+if [ ! $1 ];then
+  usage
+fi
 
 artifact_pattern=$1
 artifact_ok=$(artifact_get $artifact_pattern)
@@ -115,8 +123,7 @@ artifact=$(artifact_x $artifact_ok)
 outputdir=$2
 
 if [ ! $artifact ];then
-   echo 'usage: dependency-copy <group:artifact:version> [output-dir]'
-   exit
+  usage
 fi
 
 if [ ! $outputdir ];then
