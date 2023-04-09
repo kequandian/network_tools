@@ -4,5 +4,6 @@ env.sample.*
 data/indexes/*
 BOOT-INF/
 META-INF/
+app/
 node_modules/
 package-lock.json
