@@ -23,7 +23,7 @@ findstandalone(){
       # cd $target
       local result=$(ls $target/*-standalone.jar $target/app.jar $target/*.war 2> /dev/null)
       if [ -z "$result" ];then
-         echo "$result not found !" > /dev/stderr
+         echo "no standalone not found within: $target !" > /dev/stderr
          exit -1
       fi
       if [ ! -f "$result" ];then 
@@ -77,7 +77,7 @@ try_checksame(){
    fi
 
    ## continue to check the latest rollback
-   latest_rollback=$(ls $DIR/*.rollback.* -t | head -1)
+   latest_rollback=$(ls $DIR/*.rollback* -t | head -1)
    shasum=$(checksame $app $latest_rollback)
    if [ ! -z $shasum ];then
       ROLLBACK=${latest_rollback##*/}   ## the name 
@@ -137,14 +137,15 @@ rollback() {
 
    ##### hourly
    ## means not the same file, get the hourly ROLLBACK
-   ROLLBACK=$app_name.rollback.$(date "+%Y-%m-%d")
+   ROLLBACK=$app_name.$(date "+%Y-%m-%d").rollback
    if [ $tag ];then
-      ROLLBACK="$ROLLBACK.before.$tag"
+      ROLLBACK=${target%.rollback}
+      ROLLBACK="$ROLLBACK..$tag.rollback"
    fi
    if [ ! -f $app_dir/$ROLLBACK ];then
        #echo cp $target $app_dir/$ROLLBACK > /dev/stderr
-       echo mv $target $app_dir/$ROLLBACK > /dev/stderr
-       mv $target $app_dir/$ROLLBACK
+       echo cp $target $app_dir/$ROLLBACK > /dev/stderr
+       cp $target $app_dir/$ROLLBACK
        echo $ROLLBACK
        return
    fi
@@ -156,9 +157,10 @@ rollback() {
 
    ##### minutely
    ## means not the same file, get the minutely ROLLBACK
-   ROLLBACK=$app_name.rollback.$(date "+%Y-%m-%d")
+   ROLLBACK=$app_name.$(date "+%Y-%m-%d").rollback
    if [ $tag ];then
-      ROLLBACK="$ROLLBACK.before.$tag"
+      ROLLBACK=${target%.rollback}
+      ROLLBACK="$ROLLBACK..$tag.rollback"
    fi
    if [ ! -f $app_dir/$ROLLBACK ];then
        #echo cp $target $app_dir/$ROLLBACK > /dev/stderr
@@ -218,17 +220,17 @@ if [ ! $target ];then
 fi
 
 ## start
-echo .. rollback: $target $tag > /dev/stderr
+echo start rollback within: $target $tag > /dev/stderr
 rollback_result=$(rollback $target $tag)
 # echo rollback_result=$rollback_result
 if [ ! -z "$rollback_result" ];then 
    rollback_pattern=${rollback_result%.jar*}
-   rollback_pattern=$rollback_pattern.jar.*.rollback
+   rollback_pattern=$rollback_pattern.jar.*.rollback*
 
    ## show rollback result
    rollback_dir=${rollback_result%\/*}
    ls $rollback_dir/*.rollback* -t 2> /dev/null
-   echo .. rollbackkeep $rollback_pattern $keep_num > /dev/stderr
+   echo rollbackkeep $rollback_pattern $keep_num > /dev/stderr
    rollbackkeep $rollback_pattern $keep_num
    ls $rollback_dir/*.rollback* -t 2> /dev/null
 fi
