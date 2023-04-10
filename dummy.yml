@@ -10,6 +10,7 @@ services:
     ports:
       - 6000:8080
     environment:
+      TZ: Asia/Shanghai
       ROLLBACK_KEEP_NUM: 2
       DOCKER_SOCKET: /var/run/docker.sock
       # DOCKER_ENDPOINT: 172.18.0.1:2375
