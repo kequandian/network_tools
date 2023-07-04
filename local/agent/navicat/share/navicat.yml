@@ -15,5 +15,5 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./conf.d/mysql-expose.mod:/etc/nginx/conf.d/mysql-expose.mod
     ports:
-      - 23336:23306
+      - 23306:23306
   
