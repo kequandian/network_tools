@@ -1,1 +1,1 @@
-local/agent/navicat/navicat.sh
+./local/agent/navicat/navicat.sh

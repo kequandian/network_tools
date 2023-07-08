@@ -8,3 +8,4 @@ app/
 lib/
 node_modules/
 package-lock.json
+./git-ssh/
