@@ -15,7 +15,7 @@ run() {
         docker stop socat 2> /dev/null
         docker rm socat 2> /dev/null
      fi
-     docker run $detach  -v /var/run/docker.sock:/var/run/docker.sock --name socat -p 2375:2375 bobrik/socat TCP-LISTEN:2375,fork UNIX-CONNECT:/var/run/docker.sock
+     docker run $detach  -v /var/run/docker.sock:/var/run/docker.sock --name socat -p 2375:2375 alpine/socat TCP-LISTEN:2375,fork UNIX-CONNECT:/var/run/docker.sock
   fi
 }
 
